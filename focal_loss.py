@@ -28,7 +28,9 @@ def categorical_focal_loss(gamma=2.0, alpha=0.25):
         # for 0 divisor case
         epsilon = K.epsilon()
         # Add the epsilon to prediction value
-        y_pred = y_pred + epsilon
+        #y_pred = y_pred + epsilon
+        # Clip the prediction value
+        y_pred = K.clip(y_pred, epsilon, 1.0-epsilon)
         # Calculate cross entropy
         cross_entropy = -y_true*K.log(y_pred)
         # Calculate weight that consists of  modulating factor and weighting factor
@@ -66,7 +68,9 @@ def binary_focal_loss(gamma=2.0, alpha=0.25):
         # for 0 divisor case
         epsilon = K.epsilon()
         # Add the epsilon to prediction value
-        y_pred = y_pred + epsilon
+        #y_pred = y_pred + epsilon
+        # Clip the prediciton value
+        y_pred = K.clip(y_pred, epsilon, 1.0-epsilon)
         # Calculate p_t
         p_t = tf.where(K.equal(y_true, 1), y_pred, 1-y_pred)
         # Calculate alpha_t
